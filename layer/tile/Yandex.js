@@ -59,8 +59,8 @@ L.Yandex = L.Class.extend({
 		// set up events
 		map.on('viewreset', this._resetCallback, this);
 
-		this._limitedUpdate = L.Util.limitExecByInterval(this._update, 150, this);
-		map.on('move', this._update, this);
+		this._limitedUpdate = L.Util.limitExecByInterval(this._updateCallback, 150, this);
+		map.on('move', this._updateCallback, this);
 
 		map._controlCorners.bottomright.style.marginBottom = '3em';
 
@@ -73,7 +73,7 @@ L.Yandex = L.Class.extend({
 
 		this._map.off('viewreset', this._resetCallback, this);
 
-		this._map.off('move', this._update, this);
+		this._map.off('move', this._updateCallback, this);
 
 		map._controlCorners.bottomright.style.marginBottom = '0em';
 	},
@@ -157,6 +157,10 @@ L.Yandex = L.Class.extend({
 
 	_reset: function(clearOldContainer) {
 		this._initContainer();
+	},
+
+	_updateCallback: function(e) {
+		this._update(false);
 	},
 
 	_update: function(force) {
