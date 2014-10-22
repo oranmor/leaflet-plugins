@@ -12,7 +12,8 @@ L.Yandex = L.Class.extend({
 		maxZoom: 18,
 		attribution: '',
 		opacity: 1,
-		traffic: false
+		traffic: false,
+		zoomSpeed: 250
 	},
 
 	possibleShortMapTypes: {
@@ -176,21 +177,21 @@ L.Yandex = L.Class.extend({
 		var center = this._map.getCenter();
 		var _center = [center.lat, center.lng];
 		var zoom = this._map.getZoom();
+		var zoomSpeed = (this._map.options.zoomAnimation) ? this.options.zoomSpeed : 0;
 
 		if (force || this._yandex.getZoom() !== zoom)
-			this._yandex.setCenter(_center, zoom, {duration: 0});
+			this._yandex.setCenter(_center, zoom, {duration: zoomSpeed});
 		else
 			this._yandex.panTo(_center, {duration: 0, delay: 0});
 	},
 
 	_zoomAnim: function(e) {
 		if (!this._yandex) return;
-
 		var center = e.to.center;
 		var _center = [center.lat, center.lng];
 		var zoom = e.to.zoom;
 
-		this._yandex.setCenter(_center, zoom, {duration: 250});
+		this._yandex.setCenter(_center, zoom, {duration: this.options.zoomSpeed});
 	},
 
 	_resize: function(force) {
